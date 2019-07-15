@@ -17,9 +17,10 @@ def rotor_ps():
     import particle_plots as pp
     
     start_time = time.time()
+    wrdir = os.getcwd()
     
     N = init.init()
-    print('Number of particles spawned = ', N)
+    print('Number of particles counted = ', N)
 #    pp.spp(N)
     
     end_time = time.time()
@@ -28,7 +29,7 @@ def rotor_ps():
     
 #    print('Is this the working directory? (y/n)')
     # Changing wdir back to current dev folder
-    os.chdir('/Users/kal/OneDrive - University of Cincinnati/parmigiano/new_pp_scripts/rotor_pp')
+    os.chdir(wrdir)
     print("\nWdir set to default location")
     
     return

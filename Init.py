@@ -15,7 +15,6 @@ def init():
     import subprocess
     import os
     import re
-    import particle_plots as pp
     
     # Find max. no. of particles by max file number "N"
     max_N = lambda: subprocess.Popen("ls particle.* | sort -rn | head -1 | awk -F'[.]' '{print $2}'",
@@ -47,8 +46,8 @@ def init():
             break
         print('This really is a dumb system. Please enter y/n.\n')
     
-    
-    print('\n&&&&&&&  Welcome to Rotor 37 post-processing scrpit  &&&&&&&\n',
+    # Usr interface heirarchy
+    print('\n&&&&&&&  Welcome to Rotor 37 particle post-processing scrpit  &&&&&&&\n',
           '\nPlease choose a number from below to perform an action:',
           '\n 1. Contours',
           '\n 2. Single particle plots',
@@ -56,13 +55,40 @@ def init():
           '\n 4. Location plots')
     
     usr_selection = input()
-    print('usr_selection=', usr_selection)
-    
     if int(usr_selection) == 2:
-        # A loop to go through all particle files. Later can be modified for parallel processing -- Check OneNote
-#        print('Using usr value as 2 to spawn ' + str(N) + ' particles')
-        for i in range(N):
-#            print('for loop is good and using ' + str(i+1))
-            pp.spp(i+1)
-    
+        # Plot n number of particles
+        print('Number of particles to plot? If all input 0,',
+              'If you want to select particle individually input a negative number')
+        particle_no = 0 # Variable for individual particles
+        no_of_particles = int(input())
+        if no_of_particles == 0 or no_of_particles >= N:
+            no_of_particles = N
+            plot_particles(no_of_particles, particle_no)
+        elif 0 < no_of_particles <= N:
+            plot_particles(no_of_particles, particle_no)
+            
+        # Plot given particle number
+        while no_of_particles < 0:
+            print('Enter particle number. If done enter 0.')
+            particle_no = int(input())
+            if particle_no == 0:
+                print('Done with single particle plots.')
+                no_of_particles = 7 # Some positive number
+                particle_no = -7 # Some negative number
+            elif particle_no > 0:
+                plot_particles(no_of_particles, particle_no)
+            
+            
     return N
+    
+
+def plot_particles(no_of_particles, particle_no):
+    import particle_plots as pp
+    # A loop to go through all particle files. Later can be modified for parallel processing -- Check OneNote
+    if no_of_particles >= 0:
+        for i in range(no_of_particles):
+            pp.spp(i+1)
+    elif no_of_particles < 0:
+        pp.spp(particle_no)
+    
+    return
